@@ -247,16 +247,14 @@ export default function TrusteeDashboardScreen() {
       : COLORS.borderDark,
   }));
 
-  const animatedAudioBarStyle = (index: number) => useAnimatedStyle(() => {
-    const heights = [12, 20, 8, 16, 14];
-    const baseHeight = heights[index];
+  // Pre-create all audio bar animated styles (FIX for hooks issue)
+  const audioBar0Style = useAnimatedStyle(() => {
+    const baseHeight = 12;
     const animatedHeight = sosStatus.isActive
       ? interpolate(
           audioPulse.value,
           [0, 0.5, 1],
-          index % 2 === 0 
-            ? [baseHeight, baseHeight * 1.5, baseHeight] 
-            : [baseHeight * 1.2, baseHeight, baseHeight * 1.3]
+          [baseHeight, baseHeight * 1.5, baseHeight]
         )
       : baseHeight;
     
@@ -267,6 +265,87 @@ export default function TrusteeDashboardScreen() {
         : 0.5,
     };
   });
+
+  const audioBar1Style = useAnimatedStyle(() => {
+    const baseHeight = 20;
+    const animatedHeight = sosStatus.isActive
+      ? interpolate(
+          audioPulse.value,
+          [0, 0.5, 1],
+          [baseHeight * 1.2, baseHeight, baseHeight * 1.3]
+        )
+      : baseHeight;
+    
+    return {
+      height: animatedHeight,
+      opacity: sosStatus.isActive 
+        ? interpolate(audioPulse.value, [0, 1], [0.7, 1])
+        : 0.5,
+    };
+  });
+
+  const audioBar2Style = useAnimatedStyle(() => {
+    const baseHeight = 8;
+    const animatedHeight = sosStatus.isActive
+      ? interpolate(
+          audioPulse.value,
+          [0, 0.5, 1],
+          [baseHeight, baseHeight * 1.5, baseHeight]
+        )
+      : baseHeight;
+    
+    return {
+      height: animatedHeight,
+      opacity: sosStatus.isActive 
+        ? interpolate(audioPulse.value, [0, 1], [0.7, 1])
+        : 0.5,
+    };
+  });
+
+  const audioBar3Style = useAnimatedStyle(() => {
+    const baseHeight = 16;
+    const animatedHeight = sosStatus.isActive
+      ? interpolate(
+          audioPulse.value,
+          [0, 0.5, 1],
+          [baseHeight * 1.2, baseHeight, baseHeight * 1.3]
+        )
+      : baseHeight;
+    
+    return {
+      height: animatedHeight,
+      opacity: sosStatus.isActive 
+        ? interpolate(audioPulse.value, [0, 1], [0.7, 1])
+        : 0.5,
+    };
+  });
+
+  const audioBar4Style = useAnimatedStyle(() => {
+    const baseHeight = 14;
+    const animatedHeight = sosStatus.isActive
+      ? interpolate(
+          audioPulse.value,
+          [0, 0.5, 1],
+          [baseHeight, baseHeight * 1.5, baseHeight]
+        )
+      : baseHeight;
+    
+    return {
+      height: animatedHeight,
+      opacity: sosStatus.isActive 
+        ? interpolate(audioPulse.value, [0, 1], [0.7, 1])
+        : 0.5,
+    };
+  });
+
+  // Create an array to easily access them by index
+  const audioBarStyles = [
+    audioBar0Style,
+    audioBar1Style,
+    audioBar2Style,
+    audioBar3Style,
+    audioBar4Style,
+  ];
 
   if (!sosStatus.isActive) {
     return (
@@ -464,7 +543,7 @@ export default function TrusteeDashboardScreen() {
                   {[0, 1, 2, 3, 4].map((index) => (
                     <Animated.View 
                       key={index}
-                      style={[styles.audioBar, animatedAudioBarStyle(index)]} 
+                      style={[styles.audioBar, audioBarStyles[index]]} 
                     />
                   ))}
                 </View>
